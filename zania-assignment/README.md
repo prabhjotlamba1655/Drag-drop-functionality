@@ -204,7 +204,7 @@ To get the project up and running on your local development environment, follow 
    First, clone the project repository from GitHub:
 
    ```bash
-   git clone https://github.com/prabhjotlamba1655/drag-drop-functionality.git
+   git clone https://github.com/prabhjotlamba1655/Drag-drop-functionality.git
    cd zania-assignment
    ```
 
