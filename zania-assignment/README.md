@@ -229,3 +229,5 @@ To get the project up and running on your local development environment, follow 
    This command will start the local development server and open the application in your default web browser.
 
 Following these steps will help you set up and run the project successfully in your local development environment.
+
+#### Note: Please be aware that the Docker process could not be completed due to an issue with the `mockServiceWorker.js` file. In Docker, we copy all files, but this particular file changes with each refresh. As a result, the webpage was using a previously cached version of `mockServiceWorker.js`, which caused the error.
