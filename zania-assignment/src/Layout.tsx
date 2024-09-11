@@ -12,6 +12,12 @@ export const Layout: React.FC = () => {
   const [overlayImage, setOverlayImage] = useState<string | null>(null); // Track the overlay image
 
   const lastCardOrderRef = useRef<string[]>([]); // Track the last card order
+  const cardRef = useRef<any>(cards); // Track the last card order
+
+  useEffect(() => {
+    cardRef.current = [...cards];
+  }, [cards]);
+
 
   // added useEffect to fetch the documents and set the cards state
   useEffect(() => {
@@ -50,15 +56,18 @@ export const Layout: React.FC = () => {
   // added useEffect to save the documents every 5 seconds if the order of the cards has changed
   useEffect(() => {
     const interval = setInterval(() => {
-      const updatedOrder = compareCardOrder(cards, lastCardOrderRef.current);
+      const updatedOrder = compareCardOrder(cardRef.current, lastCardOrderRef.current);
+      
       if (updatedOrder) {
         lastCardOrderRef.current = updatedOrder;
-        saveDocuments(cards); // Use saveDocuments function here
+        saveDocuments(cardRef.current); // Use saveDocuments function here
       }
     }, 5000);
-
     return () => clearInterval(interval);
-  }, [cards]);
+  }, []);
+
+
+  
 
   /**
    *
@@ -74,15 +83,18 @@ export const Layout: React.FC = () => {
    * @param event
    * @param index
    */
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>, index: number) => {
-    if (draggedCardIndex !== null && draggedCardIndex !== index) {
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>, newIndex: number) => {
+    if (draggedCardIndex !== null && draggedCardIndex !== newIndex) {
       setCards((prevCards) => {
         const updatedCards = [...prevCards];
-        // swap the values of two elements in the updatedCards array
-        [updatedCards[draggedCardIndex], updatedCards[index]] = [
-          updatedCards[index],
-          updatedCards[draggedCardIndex],
-        ];
+        const draggedCard = updatedCards[draggedCardIndex];
+  
+        // Remove the dragged card from its original position
+        updatedCards.splice(draggedCardIndex, 1);
+  
+        // Insert the dragged card at the new index and displace others
+        updatedCards.splice(newIndex, 0, draggedCard);
+  
         return updatedCards;
       });
     }
